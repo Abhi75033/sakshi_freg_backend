@@ -21,7 +21,11 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: true, // Reflects the exact origin of the request
+    origin: [
+        'https://saksahi-freg-frontend.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:8080',
+    ],
     credentials: true,
 }));
 app.use(express.json());
