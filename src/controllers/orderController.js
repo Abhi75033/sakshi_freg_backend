@@ -1,3 +1,5 @@
+import Order from '../models/Order.js';
+
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
