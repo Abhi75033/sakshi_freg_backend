@@ -1,5 +1,3 @@
-import Order from '../models/Order.js';
-
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
@@ -17,23 +15,29 @@ export const addOrderItems = async (req, res) => {
     if (orderItems && orderItems.length === 0) {
         res.status(400).json({ message: 'No order items' });
         return;
-    } else {
-        const order = new Order({
-            orderItems,
-            user: req.user._id,
-            shippingAddress,
-            paymentMethod,
-            itemsPrice,
-            taxPrice,
-            shippingPrice,
-            totalPrice,
-        });
-
-        const createdOrder = await order.save();
-
-        res.status(201).json(createdOrder);
     }
+
+    // COD is allowed only for orders below ₹600
+    if (paymentMethod === 'Cash on Delivery' && totalPrice >= 600) {
+        res.status(400).json({ message: 'Cash on Delivery is not available for orders of ₹600 or above. Please choose UPI or Credit Card.' });
+        return;
+    }
+
+    const order = new Order({
+        orderItems,
+        user: req.user._id,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+    });
+
+    const createdOrder = await order.save();
+    res.status(201).json(createdOrder);
 };
+
 
 // @desc    Get order by ID
 // @route   GET /api/orders/:id

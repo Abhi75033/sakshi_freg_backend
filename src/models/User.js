@@ -21,15 +21,19 @@ const userSchema = new mongoose.Schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
-        savedAddress: {
-            name: String,
-            street: String,
-            city: String,
-            state: String,
-            zipCode: String,
-            country: String,
-            phone: String,
-        },
+        addresses: [
+            {
+                label: { type: String, default: 'Home' },
+                name: String,
+                street: String,
+                city: String,
+                state: String,
+                zipCode: String,
+                country: { type: String, default: 'India' },
+                phone: String,
+                isDefault: { type: Boolean, default: false },
+            },
+        ],
         wishlist: [
             {
                 type: mongoose.Schema.Types.ObjectId,
