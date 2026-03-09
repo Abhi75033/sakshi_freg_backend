@@ -25,12 +25,14 @@ export const getProductById = async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
-    const { title, description, price, image, category, isNewProduct, isBestseller } = req.body;
+    const { title, description, price, image, images, quantity, category, isNewProduct, isBestseller } = req.body;
     const product = new Product({
         title,
         description,
         price,
         image,
+        images: images || (image ? [image] : []),
+        quantity: quantity ?? 0,
         category,
         isNewProduct,
         isBestseller,
@@ -44,15 +46,17 @@ export const createProduct = async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
-    const { title, description, price, image, category, isNewProduct, isBestseller } = req.body;
+    const { title, description, price, image, images, quantity, category, isNewProduct, isBestseller } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
         product.title = title || product.title;
         product.description = description || product.description;
-        product.price = price || product.price;
+        product.price = price !== undefined ? price : product.price;
         product.image = image || product.image;
+        product.images = images !== undefined ? images : product.images;
+        if (quantity !== undefined) product.quantity = quantity;
         product.category = category || product.category;
         if (isNewProduct !== undefined) product.isNewProduct = isNewProduct;
         if (isBestseller !== undefined) product.isBestseller = isBestseller;
