@@ -26,6 +26,7 @@ app.use(cors({
         'http://localhost:5173',
         'http://localhost:5174',
         'http://localhost:8080',
+        "https://meek-longma-8a7587.netlify.app/"
     ],
     credentials: true,
 }));
